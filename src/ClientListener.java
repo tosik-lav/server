@@ -26,7 +26,6 @@ public class ClientListener implements Runnable {
             while (scanner.hasNextLine()) {
 
                 String key = scanner.nextLine();
-                System.out.println("scanner key");
                 Gson gson = new Gson();
                 String json ;
                 String jsonDoc;
@@ -34,7 +33,6 @@ public class ClientListener implements Runnable {
 
                 switch (key) {
                     case Constanta.KEY_ADD_CLIENT: //вставить клиента
-                        System.out.println("add client");
                         json = scanner.nextLine();
 
                         Client client = gson.fromJson(json, Client.class);
@@ -43,12 +41,8 @@ public class ClientListener implements Runnable {
 
                         writer.println(id);
                         writer.flush();
-
-                        System.out.println("finish");
-                        break;
+                       break;
                     case Constanta.KEY_FIND_CLIENT:
-                        System.out.println("find client");
-
                         String phone = scanner.nextLine();
                         Client clientPhone = db.findClient(phone);
 
@@ -81,7 +75,6 @@ public class ClientListener implements Runnable {
 
                         writer.println(jsonService);
                         writer.flush();
-                        System.out.println("KEY_PRICE finish");
                         break;
                     case Constanta.KEY_TIMETABLE: // сохранить запись на прием
                         json = scanner.nextLine();
@@ -90,10 +83,8 @@ public class ClientListener implements Runnable {
                         Timetable timetable = gson.fromJson(json, Timetable.class);
 
                         db.saveTimetable(timetable);
-                        System.out.println("saveTimetable finish");
                         break;
                     case Constanta.KEY_GET_DOC_SERVICE:
-                        System.out.println("KEY_GET_DOC_SERVICE start");
                         ArrayList<String> fullName = db.getAllDocName();
 
                         jsonDoc = gson.toJson(fullName);
@@ -106,7 +97,6 @@ public class ClientListener implements Runnable {
 
                         writer.println(jsonService);
                         writer.flush();
-                        System.out.println("KEY_GET_DOC_SERVICE finish");
                         break;
                 }
             }
