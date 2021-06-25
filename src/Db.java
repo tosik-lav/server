@@ -6,6 +6,7 @@ import com.google.exchange.Timetable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class Db {
     static final String DB_URL = "jdbc:postgresql://localhost/clinik_db";
@@ -144,6 +145,36 @@ public class Db {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public ArrayList<Timetable> getTimetable(int id) {
+        ArrayList<Timetable> timetables = null;
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        month = month + 1;
+        int year = calendar.get(Calendar.YEAR);
+        String select = "SELECT * FROM timetable where id_client = " + id
+                + "and EXTRACT(MONTH FROM data) = " + month
+                + "and EXTRACT(YEAR FROM data) = " + year
+                + "order by data, time DESC";
+        try (
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(select)
+        ) {
+            timetables = new ArrayList<>();
+            while (resultSet.next()) {
+                String data = resultSet.getString("data");
+                String time = resultSet.getString("time");
+                int id_client = resultSet.getInt("id_client");
+                int id_doctor = resultSet.getInt("id_doctor");
+                int id_service = resultSet.getInt("id_service");
+                timetables.add(new Timetable(data, time, id_client, id_doctor, id_service));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        System.out.println("getTimetable " + timetables.size());
+        return timetables;
     }
 
     //вытаскиваем имя докторов

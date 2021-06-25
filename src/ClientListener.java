@@ -27,7 +27,7 @@ public class ClientListener implements Runnable {
 
                 String key = scanner.nextLine();
                 Gson gson = new Gson();
-                String json ;
+                String json;
                 String jsonDoc;
                 String jsonService;
 
@@ -41,7 +41,7 @@ public class ClientListener implements Runnable {
 
                         writer.println(id);
                         writer.flush();
-                       break;
+                        break;
                     case Constanta.KEY_FIND_CLIENT:
                         String phone = scanner.nextLine();
                         Client clientPhone = db.findClient(phone);
@@ -69,20 +69,20 @@ public class ClientListener implements Runnable {
                         break;
                     case Constanta.KEY_PRICE: // цены на услуги
                         ArrayList<Service> prices = db.getPrice();
-                        System.out.println(prices.size());
 
                         jsonService = gson.toJson(prices);
 
                         writer.println(jsonService);
                         writer.flush();
                         break;
-                    case Constanta.KEY_TIMETABLE: // сохранить запись на прием
+                    case Constanta.KEY_ADD_TIMETABLE: // сохранить запись на прием
                         json = scanner.nextLine();
-                        System.out.println("json " + json);
+                         System.out.println("json " + json);
 
-                        Timetable timetable = gson.fromJson(json, Timetable.class);
+                            Timetable timetable = gson.fromJson(json, Timetable.class);
 
-                        db.saveTimetable(timetable);
+                            db.saveTimetable(timetable);
+
                         break;
                     case Constanta.KEY_GET_DOC_SERVICE:
                         ArrayList<String> fullName = db.getAllDocName();
@@ -96,6 +96,18 @@ public class ClientListener implements Runnable {
                         jsonService = gson.toJson(allCategory);
 
                         writer.println(jsonService);
+                        writer.flush();
+                        break;
+                    case Constanta.KEY_GET_TIMETABLE:
+                        System.out.println("KEY_GET_TIMETABLE");
+                        int idCl = scanner.nextInt();
+                        System.out.println("idCl " + idCl);
+
+                        ArrayList<Timetable> timetables = db.getTimetable(idCl);
+
+                        String jsonTime = gson.toJson(timetables);
+                        System.out.println("jsonTime");
+                        writer.println(jsonTime);
                         writer.flush();
                         break;
                 }
